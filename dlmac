@@ -123,6 +123,7 @@ cmd_video() {
   yt-dlp \
     -f "$quality_format" \
     --merge-output-format mp4 \
+    --recode-video mp4 \
     -o "${DOWNLOAD_DIR}/%(title)s.%(ext)s" \
     "$url"
 }
