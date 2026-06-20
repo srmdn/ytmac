@@ -28,21 +28,61 @@ EOF
   exit "${1:-0}"
 }
 
+require_cmd() {
+  local cmd="$1"
+  if ! command -v "$cmd" &>/dev/null; then
+    echo "ytmac: '$cmd' not found."
+    echo "Install with: brew install $cmd"
+    exit 1
+  fi
+}
+
+cmd_info() {
+  if [[ $# -eq 0 ]]; then
+    echo "ytmac: missing URL"
+    echo "Usage: ytmac info <url>"
+    exit 1
+  fi
+
+  require_cmd yt-dlp
+  yt-dlp --print title --print duration --print uploader "$1"
+}
+
+cmd_formats() {
+  if [[ $# -eq 0 ]]; then
+    echo "ytmac: missing URL"
+    echo "Usage: ytmac formats <url>"
+    exit 1
+  fi
+
+  require_cmd yt-dlp
+  yt-dlp -F "$1"
+}
+
 main() {
   if [[ $# -eq 0 ]]; then
     usage 0
   fi
 
-  case "$1" in
-    info|formats|video|audio|convert)
-      echo "ytmac: '$1' not implemented yet (v${VERSION} scaffold)"
+  local cmd="$1"
+  shift
+
+  case "$cmd" in
+    info)
+      cmd_info "$@"
+      ;;
+    formats)
+      cmd_formats "$@"
+      ;;
+    video|audio|convert)
+      echo "ytmac: '$cmd' not implemented yet (v${VERSION})"
       exit 0
       ;;
     -h|--help)
       usage 0
       ;;
     *)
-      echo "ytmac: unknown command '$1'"
+      echo "ytmac: unknown command '$cmd'"
       usage 1
       ;;
   esac
