@@ -44,6 +44,12 @@ cmd_info() {
     exit 1
   fi
 
+  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: dlmac info <url>"
+    echo "Show video metadata (title, duration, uploader)."
+    exit 0
+  fi
+
   require_cmd yt-dlp
   yt-dlp --print title --print duration --print uploader "$1"
 }
@@ -53,6 +59,12 @@ cmd_formats() {
     echo "dlmac: missing URL"
     echo "Usage: dlmac formats <url>"
     exit 1
+  fi
+
+  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: dlmac formats <url>"
+    echo "Show available download formats."
+    exit 0
   fi
 
   require_cmd yt-dlp
@@ -89,6 +101,11 @@ cmd_video() {
             ;;
         esac
         shift 2
+        ;;
+      --help|-h)
+        echo "Usage: dlmac video <url> [--quality 720p|1080p]"
+        echo "Download best video+audio merged to mp4."
+        exit 0
         ;;
       *)
         echo "dlmac: unknown option '$1'"
@@ -139,6 +156,11 @@ cmd_audio() {
             ;;
         esac
         shift 2
+        ;;
+      --help|-h)
+        echo "Usage: dlmac audio <url> [--format mp3|m4a|wav]"
+        echo "Download best audio, default mp3."
+        exit 0
         ;;
       *)
         echo "dlmac: unknown option '$1'"
@@ -196,6 +218,11 @@ cmd_convert() {
             ;;
         esac
         shift 2
+        ;;
+      --help|-h)
+        echo "Usage: dlmac convert <file> --to mp3|m4a|wav"
+        echo "Extract audio from local video file."
+        exit 0
         ;;
       *)
         echo "dlmac: unknown option '$1'"
@@ -272,6 +299,10 @@ main() {
       ;;
     -h|--help)
       usage 0
+      ;;
+    --version)
+      echo "dlmac v${VERSION}"
+      exit 0
       ;;
     *)
       echo "dlmac: unknown command '$cmd'"

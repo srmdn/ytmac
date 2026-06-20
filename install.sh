@@ -48,4 +48,4 @@ chmod +x dlmac
 echo ""
 echo "Done. Run ./dlmac to see usage."
 echo "Add to PATH for global access (optional):"
-echo "  export PATH=\"\$PATH:$(pwd)\""
+echo "  export PATH=\"\$PATH:$PWD\""

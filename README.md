@@ -42,13 +42,13 @@ All downloads saved to `./downloads/`.
 
 ```bash
 # Get video info
-./dlmac info "https://www.youtube.com/watch?v=..."
+./dlmac info "https://example.com/video"
 
 # Download video at 720p
-./dlmac video "https://www.youtube.com/watch?v=..." --quality 720p
+./dlmac video "https://example.com/video" --quality 720p
 
 # Download audio as mp3
-./dlmac audio "https://www.youtube.com/watch?v=..." --format mp3
+./dlmac audio "https://example.com/video" --format mp3
 
 # Extract audio from local video
 ./dlmac convert myvideo.mp4 --to mp3
