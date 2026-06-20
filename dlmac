@@ -12,6 +12,8 @@ Usage:
   dlmac info <url>                    Show video metadata
   dlmac formats <url>                 Show available formats
   dlmac video <url>                   Download best video (mp4)
+  dlmac video <url> --quality 360p    Download best video up to 360p
+  dlmac video <url> --quality 480p    Download best video up to 480p
   dlmac video <url> --quality 720p    Download best video up to 720p
   dlmac video <url> --quality 1080p   Download best video up to 1080p
   dlmac audio <url>                   Download best audio (mp3)
@@ -74,8 +76,14 @@ cmd_formats() {
 cmd_video() {
   if [[ $# -eq 0 ]]; then
     echo "dlmac: missing URL"
-    echo "Usage: dlmac video <url> [--quality 720p|1080p]"
+    echo "Usage: dlmac video <url> [--quality 360p|480p|720p|1080p]"
     exit 1
+  fi
+
+  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: dlmac video <url> [--quality 360p|480p|720p|1080p]"
+    echo "Download best video+audio merged to mp4 (H.264, QuickTime-compatible)."
+    exit 0
   fi
 
   local url="$1"
@@ -88,28 +96,25 @@ cmd_video() {
       --quality)
         if [[ -z "${2:-}" ]]; then
           echo "dlmac: --quality requires a value"
-          echo "Valid values: 720p, 1080p"
+          echo "Valid values: 360p, 480p, 720p, 1080p"
           exit 1
         fi
         case "$2" in
+          360p)  quality_format="bv*[height<=360]+ba/b[height<=360]" ;;
+          480p)  quality_format="bv*[height<=480]+ba/b[height<=480]" ;;
           720p)  quality_format="bv*[height<=720]+ba/b[height<=720]" ;;
           1080p) quality_format="bv*[height<=1080]+ba/b[height<=1080]" ;;
           *)
             echo "dlmac: unsupported quality '$2'"
-            echo "Valid values: 720p, 1080p"
+            echo "Valid values: 360p, 480p, 720p, 1080p"
             exit 1
             ;;
         esac
         shift 2
         ;;
-      --help|-h)
-        echo "Usage: dlmac video <url> [--quality 720p|1080p]"
-        echo "Download best video+audio merged to mp4."
-        exit 0
-        ;;
       *)
         echo "dlmac: unknown option '$1'"
-        echo "Usage: dlmac video <url> [--quality 720p|1080p]"
+        echo "Usage: dlmac video <url> [--quality 360p|480p|720p|1080p]"
         exit 1
         ;;
     esac
@@ -135,6 +140,12 @@ cmd_audio() {
     exit 1
   fi
 
+  if [[ "$1" == "--help" || "$1" == "-h" ]]; then
+    echo "Usage: dlmac audio <url> [--format mp3|m4a|wav]"
+    echo "Download best audio, default mp3."
+    exit 0
+  fi
+
   local url="$1"
   shift
 
@@ -157,11 +168,6 @@ cmd_audio() {
             ;;
         esac
         shift 2
-        ;;
-      --help|-h)
-        echo "Usage: dlmac audio <url> [--format mp3|m4a|wav]"
-        echo "Download best audio, default mp3."
-        exit 0
         ;;
       *)
         echo "dlmac: unknown option '$1'"
@@ -191,6 +197,12 @@ cmd_audio() {
 }
 
 cmd_convert() {
+  if [[ $# -gt 0 && ("$1" == "--help" || "$1" == "-h") ]]; then
+    echo "Usage: dlmac convert <file> --to mp3|m4a|wav"
+    echo "Extract audio from local video file."
+    exit 0
+  fi
+
   if [[ $# -lt 2 ]]; then
     echo "dlmac: missing arguments"
     echo "Usage: dlmac convert <file> --to mp3|m4a|wav"
@@ -219,11 +231,6 @@ cmd_convert() {
             ;;
         esac
         shift 2
-        ;;
-      --help|-h)
-        echo "Usage: dlmac convert <file> --to mp3|m4a|wav"
-        echo "Extract audio from local video file."
-        exit 0
         ;;
       *)
         echo "dlmac: unknown option '$1'"
