@@ -66,16 +66,48 @@ cmd_video() {
     exit 1
   fi
 
+  local url="$1"
+  shift
+
+  local quality_format="bv*+ba/b"
+
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --quality)
+        if [[ -z "${2:-}" ]]; then
+          echo "ytmac: --quality requires a value"
+          echo "Valid values: 720p, 1080p"
+          exit 1
+        fi
+        case "$2" in
+          720p)  quality_format="bv*[height<=720]+ba/b[height<=720]" ;;
+          1080p) quality_format="bv*[height<=1080]+ba/b[height<=1080]" ;;
+          *)
+            echo "ytmac: unsupported quality '$2'"
+            echo "Valid values: 720p, 1080p"
+            exit 1
+            ;;
+        esac
+        shift 2
+        ;;
+      *)
+        echo "ytmac: unknown option '$1'"
+        echo "Usage: ytmac video <url> [--quality 720p|1080p]"
+        exit 1
+        ;;
+    esac
+  done
+
   require_cmd yt-dlp
   require_cmd ffmpeg
 
   mkdir -p "$DOWNLOAD_DIR"
 
   yt-dlp \
-    -f "bv*+ba/b" \
+    -f "$quality_format" \
     --merge-output-format mp4 \
     -o "${DOWNLOAD_DIR}/%(title)s.%(ext)s" \
-    "$1"
+    "$url"
 }
 
 main() {
