@@ -1,0 +1,44 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Downloads/output
+downloads/
+
+# Editor
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Private docs (local only)
+.local/
+
+# yt-dlp artifacts
+*.part
+*.ytdl
+*.tmp
+
+# Config
+.env
+yt-dlp.conf
+
+# Archives
+*.tar.gz
+*.zip
+
+# Backup
+*.bak
+*.orig
+
+# Python (yt-dlp)
+__pycache__/
+
+# Shell
+*.log

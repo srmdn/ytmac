@@ -1,0 +1,51 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+VERSION="0.1.0"
+DOWNLOAD_DIR="downloads"
+
+usage() {
+  cat <<EOF
+ytmac v${VERSION} — macOS CLI for yt-dlp and ffmpeg
+
+Usage:
+  ytmac info <url>                    Show video metadata
+  ytmac formats <url>                 Show available formats
+  ytmac video <url>                   Download best video (mp4)
+  ytmac video <url> --quality 720p    Download best video up to 720p
+  ytmac video <url> --quality 1080p   Download best video up to 1080p
+  ytmac audio <url>                   Download best audio (mp3)
+  ytmac audio <url> --format mp3      Download audio as mp3
+  ytmac audio <url> --format m4a      Download audio as m4a
+  ytmac audio <url> --format wav      Download audio as wav
+  ytmac convert <file> --to mp3       Extract audio from video to mp3
+  ytmac convert <file> --to m4a       Extract audio from video to m4a
+  ytmac convert <file> --to wav       Extract audio from video to wav
+
+Requirements: yt-dlp, ffmpeg (install via Homebrew)
+Output: ./downloads/
+EOF
+  exit "${1:-0}"
+}
+
+main() {
+  if [[ $# -eq 0 ]]; then
+    usage 0
+  fi
+
+  case "$1" in
+    info|formats|video|audio|convert)
+      echo "ytmac: '$1' not implemented yet (v${VERSION} scaffold)"
+      exit 0
+      ;;
+    -h|--help)
+      usage 0
+      ;;
+    *)
+      echo "ytmac: unknown command '$1'"
+      usage 1
+      ;;
+  esac
+}
+
+main "$@"
