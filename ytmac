@@ -59,6 +59,25 @@ cmd_formats() {
   yt-dlp -F "$1"
 }
 
+cmd_video() {
+  if [[ $# -eq 0 ]]; then
+    echo "ytmac: missing URL"
+    echo "Usage: ytmac video <url> [--quality 720p|1080p]"
+    exit 1
+  fi
+
+  require_cmd yt-dlp
+  require_cmd ffmpeg
+
+  mkdir -p "$DOWNLOAD_DIR"
+
+  yt-dlp \
+    -f "bv*+ba/b" \
+    --merge-output-format mp4 \
+    -o "${DOWNLOAD_DIR}/%(title)s.%(ext)s" \
+    "$1"
+}
+
 main() {
   if [[ $# -eq 0 ]]; then
     usage 0
@@ -74,7 +93,10 @@ main() {
     formats)
       cmd_formats "$@"
       ;;
-    video|audio|convert)
+    video)
+      cmd_video "$@"
+      ;;
+    audio|convert)
       echo "ytmac: '$cmd' not implemented yet (v${VERSION})"
       exit 0
       ;;
