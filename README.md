@@ -111,11 +111,11 @@ all platforms permit downloading.
 - Access private, unlisted, or members-only content
 - Circumvent platform rate limits or anti-bot measures
 
-**Platform policies vary.** YouTube generally permits personal-use downloads
-in many jurisdictions. Instagram, X (Twitter), and TikTok explicitly prohibit
-unauthorized downloading in their terms. dlmac does not encourage violating
-any platform's policies — it simply passes your URL to yt-dlp. The choice
-of what to download is yours, and so is the responsibility.
+**Platform policies vary.** Each platform has its own terms of service
+regarding downloads. Check the relevant policies before downloading.
+dlmac does not encourage violating any platform's policies — it simply
+passes your URL to yt-dlp. The choice of what to download is yours, and
+so is the responsibility.
 
 If you are unsure whether downloading specific content is legal in your
 country or permitted by the platform, consult a legal professional.

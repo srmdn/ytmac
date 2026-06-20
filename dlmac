@@ -133,6 +133,7 @@ cmd_video() {
 
   require_cmd yt-dlp
   require_cmd ffmpeg
+  require_cmd ffprobe
 
   mkdir -p "$DOWNLOAD_DIR"
 
