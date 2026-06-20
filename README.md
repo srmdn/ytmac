@@ -94,11 +94,31 @@ video. The result is still a QuickTime-compatible MP4.
 - Quality depends on source video availability; falls back to best available
   below the requested resolution
 
-## Legal Notice
+## Legal & Ethical Notice
 
-This tool is for local use with content you own, have permission to download, or that is legally available. It does **not** bypass DRM, paywalls, private content, or access restrictions.
+dlmac is a general-purpose media downloader built on yt-dlp. It does not
+discriminate by platform — any URL yt-dlp supports will work. However, not
+all platforms permit downloading.
 
-Users are responsible for respecting copyright, platform terms of service, and applicable laws.
+**You are responsible for**:
+- Ensuring you have the right to download the content
+- Checking each platform's terms of service before downloading
+- Respecting copyright, licensing, and applicable laws in your jurisdiction
+
+**What dlmac does NOT do**:
+- Bypass DRM, paywalls, or access restrictions
+- Store or transmit login credentials (no cookie/auth support)
+- Access private, unlisted, or members-only content
+- Circumvent platform rate limits or anti-bot measures
+
+**Platform policies vary.** YouTube generally permits personal-use downloads
+in many jurisdictions. Instagram, X (Twitter), and TikTok explicitly prohibit
+unauthorized downloading in their terms. dlmac does not encourage violating
+any platform's policies — it simply passes your URL to yt-dlp. The choice
+of what to download is yours, and so is the responsibility.
+
+If you are unsure whether downloading specific content is legal in your
+country or permitted by the platform, consult a legal professional.
 
 ## License
 
