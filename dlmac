@@ -89,7 +89,7 @@ cmd_video() {
   local url="$1"
   shift
 
-  local quality_format="bv*+ba/b"
+  local quality=""
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -99,17 +99,7 @@ cmd_video() {
           echo "Valid values: 360p, 480p, 720p, 1080p"
           exit 1
         fi
-        case "$2" in
-          360p)  quality_format="bv*[height<=360]+ba/b[height<=360]" ;;
-          480p)  quality_format="bv*[height<=480]+ba/b[height<=480]" ;;
-          720p)  quality_format="bv*[height<=720]+ba/b[height<=720]" ;;
-          1080p) quality_format="bv*[height<=1080]+ba/b[height<=1080]" ;;
-          *)
-            echo "dlmac: unsupported quality '$2'"
-            echo "Valid values: 360p, 480p, 720p, 1080p"
-            exit 1
-            ;;
-        esac
+        quality="$2"
         shift 2
         ;;
       *)
@@ -120,17 +110,63 @@ cmd_video() {
     esac
   done
 
+  # Build format string preferring H.264+AAC (QuickTime-compatible)
+  # Falls back to any format if H.264 unavailable
+  local fmt
+  if [[ -n "$quality" ]]; then
+    local max_height="${quality%p}"
+    case "$quality" in
+      360p)  max_height=360 ;;
+      480p)  max_height=480 ;;
+      720p)  max_height=720 ;;
+      1080p) max_height=1080 ;;
+      *)
+        echo "dlmac: unsupported quality '$quality'"
+        echo "Valid values: 360p, 480p, 720p, 1080p"
+        exit 1
+        ;;
+    esac
+    fmt="bestvideo[vcodec^=avc][height<=${max_height}]+bestaudio[ext=m4a]/bestvideo[vcodec^=avc][height<=${max_height}]+bestaudio/bv*[height<=${max_height}]+ba/b[height<=${max_height}]"
+  else
+    fmt="bestvideo[vcodec^=avc]+bestaudio[ext=m4a]/bestvideo[vcodec^=avc]+bestaudio/bv*+ba/b"
+  fi
+
   require_cmd yt-dlp
   require_cmd ffmpeg
 
   mkdir -p "$DOWNLOAD_DIR"
 
+  local output_pattern="${DOWNLOAD_DIR}/%(title)s.%(ext)s"
+
+  # Predict output filename so we can check codec after download
+  local predicted_file
+  predicted_file=$(yt-dlp --get-filename -f "$fmt" --merge-output-format mp4 -o "$output_pattern" "$url" 2>/dev/null) || true
+
   yt-dlp \
-    -f "$quality_format" \
+    -f "$fmt" \
     --merge-output-format mp4 \
-    --recode-video mp4 \
-    -o "${DOWNLOAD_DIR}/%(title)s.%(ext)s" \
+    -o "$output_pattern" \
     "$url"
+
+  # QuickTime needs H.264 video + AAC audio. If yt-dlp fell back to
+  # incompatible codecs (VP9 video or Opus audio), re-encode with ffmpeg.
+  if [[ -n "$predicted_file" && -f "$predicted_file" ]]; then
+    local vcodec acodec
+    vcodec=$(ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$predicted_file" 2>/dev/null || echo "")
+    acodec=$(ffprobe -v error -select_streams a:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 "$predicted_file" 2>/dev/null || echo "")
+    if [[ "$vcodec" != "h264" || "$acodec" != "aac" ]]; then
+      echo "Re-encoding to H.264+AAC for QuickTime compatibility..."
+      local temp="${predicted_file}.recode.mp4"
+      if ffmpeg -i "$predicted_file" -c:v libx264 -preset fast -crf 23 -c:a aac -b:a 128k -movflags +faststart -y "$temp" 2>/dev/null; then
+        mv "$temp" "$predicted_file"
+        echo "Done: $predicted_file"
+      else
+        echo "dlmac: re-encode failed, removing partial file"
+        rm -f "$temp"
+        exit 1
+      fi
+    fi
+  fi
 }
 
 cmd_audio() {
