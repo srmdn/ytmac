@@ -27,7 +27,7 @@ downloads/
 
 # Config
 .env
-yt-dlp.conf
+dlmac.conf
 
 # Archives
 *.tar.gz

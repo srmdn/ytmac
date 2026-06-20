@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "ytmac installer"
+echo "dlmac installer"
 echo "==============="
 echo ""
 
 if [[ "$(uname)" != "Darwin" ]]; then
-  echo "Error: ytmac is macOS only."
+  echo "Error: dlmac is macOS only."
   exit 1
 fi
 
@@ -43,9 +43,9 @@ if [[ ${#missing[@]} -gt 0 ]]; then
   fi
 fi
 
-chmod +x ytmac
+chmod +x dlmac
 
 echo ""
-echo "Done. Run ./ytmac to see usage."
+echo "Done. Run ./dlmac to see usage."
 echo "Add to PATH for global access (optional):"
 echo "  export PATH=\"\$PATH:$(pwd)\""

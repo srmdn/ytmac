@@ -1,6 +1,6 @@
-# ytmac
+# dlmac
 
-macOS CLI wrapper for [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [ffmpeg](https://ffmpeg.org). Download permitted YouTube videos/audio and extract audio from local video files.
+macOS CLI wrapper for [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [ffmpeg](https://ffmpeg.org). Download online media and extract audio from local video files.
 
 ## Requirements
 
@@ -12,8 +12,8 @@ macOS CLI wrapper for [yt-dlp](https://github.com/yt-dlp/yt-dlp) and [ffmpeg](ht
 ## Installation
 
 ```bash
-git clone https://github.com/srmdn/ytmac.git
-cd ytmac
+git clone https://github.com/srmdn/dlmac.git
+cd dlmac
 ./install.sh
 ```
 
@@ -22,18 +22,18 @@ cd ytmac
 ## Usage
 
 ```
-ytmac info <url>                    Show video metadata
-ytmac formats <url>                 Show available formats
-ytmac video <url>                   Download best video (mp4)
-ytmac video <url> --quality 720p    Download best video up to 720p
-ytmac video <url> --quality 1080p   Download best video up to 1080p
-ytmac audio <url>                   Download best audio (mp3)
-ytmac audio <url> --format mp3      Download audio as mp3
-ytmac audio <url> --format m4a      Download audio as m4a
-ytmac audio <url> --format wav      Download audio as wav
-ytmac convert <file> --to mp3       Extract audio from video to mp3
-ytmac convert <file> --to m4a       Extract audio from video to m4a
-ytmac convert <file> --to wav       Extract audio from video to wav
+dlmac info <url>                    Show video metadata
+dlmac formats <url>                 Show available formats
+dlmac video <url>                   Download best video (mp4)
+dlmac video <url> --quality 720p    Download best video up to 720p
+dlmac video <url> --quality 1080p   Download best video up to 1080p
+dlmac audio <url>                   Download best audio (mp3)
+dlmac audio <url> --format mp3      Download audio as mp3
+dlmac audio <url> --format m4a      Download audio as m4a
+dlmac audio <url> --format wav      Download audio as wav
+dlmac convert <file> --to mp3       Extract audio from video to mp3
+dlmac convert <file> --to m4a       Extract audio from video to m4a
+dlmac convert <file> --to wav       Extract audio from video to wav
 ```
 
 All downloads saved to `./downloads/`.
@@ -42,16 +42,16 @@ All downloads saved to `./downloads/`.
 
 ```bash
 # Get video info
-./ytmac info "https://www.youtube.com/watch?v=..."
+./dlmac info "https://www.youtube.com/watch?v=..."
 
 # Download video at 720p
-./ytmac video "https://www.youtube.com/watch?v=..." --quality 720p
+./dlmac video "https://www.youtube.com/watch?v=..." --quality 720p
 
 # Download audio as mp3
-./ytmac audio "https://www.youtube.com/watch?v=..." --format mp3
+./dlmac audio "https://www.youtube.com/watch?v=..." --format mp3
 
 # Extract audio from local video
-./ytmac convert myvideo.mp4 --to mp3
+./dlmac convert myvideo.mp4 --to mp3
 ```
 
 ## Limitations (v0.1)

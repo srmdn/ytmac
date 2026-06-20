@@ -6,21 +6,21 @@ DOWNLOAD_DIR="downloads"
 
 usage() {
   cat <<EOF
-ytmac v${VERSION} — macOS CLI for yt-dlp and ffmpeg
+dlmac v${VERSION} — macOS CLI for yt-dlp and ffmpeg
 
 Usage:
-  ytmac info <url>                    Show video metadata
-  ytmac formats <url>                 Show available formats
-  ytmac video <url>                   Download best video (mp4)
-  ytmac video <url> --quality 720p    Download best video up to 720p
-  ytmac video <url> --quality 1080p   Download best video up to 1080p
-  ytmac audio <url>                   Download best audio (mp3)
-  ytmac audio <url> --format mp3      Download audio as mp3
-  ytmac audio <url> --format m4a      Download audio as m4a
-  ytmac audio <url> --format wav      Download audio as wav
-  ytmac convert <file> --to mp3       Extract audio from video to mp3
-  ytmac convert <file> --to m4a       Extract audio from video to m4a
-  ytmac convert <file> --to wav       Extract audio from video to wav
+  dlmac info <url>                    Show video metadata
+  dlmac formats <url>                 Show available formats
+  dlmac video <url>                   Download best video (mp4)
+  dlmac video <url> --quality 720p    Download best video up to 720p
+  dlmac video <url> --quality 1080p   Download best video up to 1080p
+  dlmac audio <url>                   Download best audio (mp3)
+  dlmac audio <url> --format mp3      Download audio as mp3
+  dlmac audio <url> --format m4a      Download audio as m4a
+  dlmac audio <url> --format wav      Download audio as wav
+  dlmac convert <file> --to mp3       Extract audio from video to mp3
+  dlmac convert <file> --to m4a       Extract audio from video to m4a
+  dlmac convert <file> --to wav       Extract audio from video to wav
 
 Requirements: yt-dlp, ffmpeg (install via Homebrew)
 Output: ./downloads/
@@ -31,7 +31,7 @@ EOF
 require_cmd() {
   local cmd="$1"
   if ! command -v "$cmd" &>/dev/null; then
-    echo "ytmac: '$cmd' not found."
+    echo "dlmac: '$cmd' not found."
     echo "Install with: brew install $cmd"
     exit 1
   fi
@@ -39,8 +39,8 @@ require_cmd() {
 
 cmd_info() {
   if [[ $# -eq 0 ]]; then
-    echo "ytmac: missing URL"
-    echo "Usage: ytmac info <url>"
+    echo "dlmac: missing URL"
+    echo "Usage: dlmac info <url>"
     exit 1
   fi
 
@@ -50,8 +50,8 @@ cmd_info() {
 
 cmd_formats() {
   if [[ $# -eq 0 ]]; then
-    echo "ytmac: missing URL"
-    echo "Usage: ytmac formats <url>"
+    echo "dlmac: missing URL"
+    echo "Usage: dlmac formats <url>"
     exit 1
   fi
 
@@ -61,8 +61,8 @@ cmd_formats() {
 
 cmd_video() {
   if [[ $# -eq 0 ]]; then
-    echo "ytmac: missing URL"
-    echo "Usage: ytmac video <url> [--quality 720p|1080p]"
+    echo "dlmac: missing URL"
+    echo "Usage: dlmac video <url> [--quality 720p|1080p]"
     exit 1
   fi
 
@@ -75,7 +75,7 @@ cmd_video() {
     case "$1" in
       --quality)
         if [[ -z "${2:-}" ]]; then
-          echo "ytmac: --quality requires a value"
+          echo "dlmac: --quality requires a value"
           echo "Valid values: 720p, 1080p"
           exit 1
         fi
@@ -83,7 +83,7 @@ cmd_video() {
           720p)  quality_format="bv*[height<=720]+ba/b[height<=720]" ;;
           1080p) quality_format="bv*[height<=1080]+ba/b[height<=1080]" ;;
           *)
-            echo "ytmac: unsupported quality '$2'"
+            echo "dlmac: unsupported quality '$2'"
             echo "Valid values: 720p, 1080p"
             exit 1
             ;;
@@ -91,8 +91,8 @@ cmd_video() {
         shift 2
         ;;
       *)
-        echo "ytmac: unknown option '$1'"
-        echo "Usage: ytmac video <url> [--quality 720p|1080p]"
+        echo "dlmac: unknown option '$1'"
+        echo "Usage: dlmac video <url> [--quality 720p|1080p]"
         exit 1
         ;;
     esac
@@ -129,14 +129,14 @@ main() {
       cmd_video "$@"
       ;;
     audio|convert)
-      echo "ytmac: '$cmd' not implemented yet (v${VERSION})"
+      echo "dlmac: '$cmd' not implemented yet (v${VERSION})"
       exit 0
       ;;
     -h|--help)
       usage 0
       ;;
     *)
-      echo "ytmac: unknown command '$cmd'"
+      echo "dlmac: unknown command '$cmd'"
       usage 1
       ;;
   esac
